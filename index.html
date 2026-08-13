@@ -521,8 +521,7 @@ async function enviarLead(){
     document.getElementById('popup-form').style.display='none';
     document.getElementById('popup-success').style.display='block';
     setTimeout(()=>{
-      window.open('https://app.sendanatural.lat','_blank');
-      cerrarPopup();
+      window.location.href='https://app.sendanatural.lat';
     },1500);
 
   }catch(err){
