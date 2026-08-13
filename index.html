@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Senda Natural — Diagnóstico de Piel</title>
+<meta name="description" content="Diagnóstico personalizado de piel. Gratis. Sin rutinas genéricas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0E0D0A;
+  --superficie:#141510;
+  --panel:#1A1C15;
+  --forest:#2E5C42;
+  --forest-dim:#1F3A2E;
+  --gold:#D4AF7F;
+  --gold-soft:#EDD9B0;
+  --gold-glow:#C49A5A;
+  --crema:#FAF6F0;
+  --cream-mid:#C8BFB0;
+  --silenciado:#6B6358;
+}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--bg);color:var(--crema);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.4rem 3rem;display:flex;justify-content:space-between;align-items:center;mix-blend-mode:normal;transition:background 0.4s,border-color 0.4s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(14,13,10,0.92);backdrop-filter:blur(16px);border-color:rgba(212,175,127,0.07)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:400;letter-spacing:0.22em;color:var(--gold);text-transform:uppercase}
+.nav-cta{font-size:0.68rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--bg);background:var(--gold);border:none;padding:0.65rem 1.6rem;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:background 0.2s,transform 0.15s;text-decoration:none;display:inline-block}
+.nav-cta:hover{background:var(--gold-glow);transform:translateY(-1px)}
+
+/* SECCIONES A PANTALLA COMPLETA */
+.full{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden}
+
+/* HERO */
+#hero{background:var(--bg)}
+.hero-bg{position:absolute;inset:0;background-image:url('https://mtealontjqhhxxbltzav.supabase.co/storage/v1/object/public/assets/Imagen1.png');background-size:cover;background-position:center 20%;transform:scale(1.05);transition:transform 8s ease-out}
+.hero-bg.loaded{transform:scale(1)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(14,13,10,0.85) 0%,rgba(14,13,10,0.5) 50%,rgba(14,13,10,0.75) 100%)}
+.hero-content{position:relative;z-index:2;padding:0 3rem;max-width:1100px;width:100%}
+.hero-eyebrow{font-size:0.62rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem;opacity:0;transform:translateY(20px);transition:opacity 0.8s 0.2s,transform 0.8s 0.2s}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3.5rem,7vw,7rem);font-weight:300;line-height:1.02;color:var(--crema);margin-bottom:2rem;text-shadow:0 2px 30px rgba(14,13,10,0.8);opacity:0;transform:translateY(30px);transition:opacity 0.9s 0.4s,transform 0.9s 0.4s}
+.hero-title em{font-style:italic;color:var(--gold-soft);display:block}
+.hero-sub{font-size:1rem;color:var(--cream-mid);font-weight:300;max-width:440px;line-height:1.8;text-shadow:0 1px 12px rgba(14,13,10,0.9);margin-bottom:3rem;opacity:0;transform:translateY(20px);transition:opacity 0.8s 0.6s,transform 0.8s 0.6s}
+.hero-actions{display:flex;align-items:center;gap:2rem;opacity:0;transform:translateY(20px);transition:opacity 0.8s 0.8s,transform 0.8s 0.8s}
+.btn-gold{display:inline-block;background:var(--gold);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;padding:1rem 2.8rem;cursor:pointer;border:none;text-decoration:none;transition:background 0.2s,transform 0.15s}
+.btn-gold:hover{background:var(--gold-glow);transform:translateY(-1px)}
+.btn-ghost{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--cream-mid);text-decoration:none;border-bottom:1px solid rgba(200,191,176,0.3);padding-bottom:2px;transition:color 0.2s,border-color 0.2s}
+.btn-ghost:hover{color:var(--crema);border-color:var(--crema)}
+.hero-loaded .hero-eyebrow,
+.hero-loaded .hero-title,
+.hero-loaded .hero-sub,
+.hero-loaded .hero-actions{opacity:1;transform:translateY(0)}
+
+/* SCROLL INDICATOR */
+.scroll-indicator{position:absolute;bottom:2.5rem;left:3rem;z-index:2;display:flex;align-items:center;gap:1rem;opacity:0;transition:opacity 1s 1.2s}
+.hero-loaded .scroll-indicator{opacity:0.4}
+.scroll-indicator span{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--silenciado)}
+.scroll-track{width:40px;height:1px;background:rgba(212,175,127,0.3);position:relative;overflow:hidden}
+.scroll-track::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--gold);animation:scrollAnim 2s ease-in-out infinite 1.5s}
+@keyframes scrollAnim{0%{left:-100%}100%{left:100%}}
+
+/* NÚMEROS */
+#numeros{min-height:auto;padding:5rem 3rem;background:var(--superficie);border-top:1px solid rgba(212,175,127,0.07);border-bottom:1px solid rgba(212,175,127,0.07)}
+.numeros-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr)}
+.numero-item{text-align:center;padding:1.5rem 2rem;border-right:1px solid rgba(212,175,127,0.08)}
+.numero-item:last-child{border-right:none}
+.numero-val{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,4vw,4rem);font-weight:300;color:var(--gold);line-height:1}
+.numero-label{font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--silenciado);margin-top:0.6rem;line-height:1.5}
+
+/* PROBLEMA — PANTALLA COMPLETA */
+#problema{background:var(--bg);padding:0 3rem}
+.problema-inner{max-width:1100px;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:8rem;align-items:center}
+@media(max-width:768px){.problema-inner{grid-template-columns:1fr;gap:3rem}}
+.problema-label{font-size:0.6rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold);opacity:0.6;margin-bottom:1rem}
+.problema-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.5rem);font-weight:300;line-height:1.15;margin-bottom:1.5rem}
+.problema-sub{font-size:0.9rem;color:var(--cream-mid);line-height:1.85}
+.problema-cards{display:flex;flex-direction:column;gap:0}
+.pcard{padding:1.8rem 0;border-bottom:1px solid rgba(212,175,127,0.08);cursor:default}
+.pcard:first-child{border-top:1px solid rgba(212,175,127,0.08)}
+.pcard-header{display:flex;align-items:center;gap:1.2rem;margin-bottom:0.6rem}
+.pcard-num{font-family:'Cormorant Garamond',serif;font-size:0.75rem;color:var(--gold);opacity:0.4;letter-spacing:0.1em}
+.pcard-title{font-size:0.92rem;font-weight:500;color:var(--crema)}
+.pcard-text{font-size:0.82rem;color:var(--silenciado);line-height:1.75;padding-left:2.5rem;max-height:0;overflow:hidden;transition:max-height 0.4s ease,opacity 0.4s ease;opacity:0}
+.pcard:hover .pcard-text{max-height:100px;opacity:1}
+
+/* MÉTODO — PANTALLA COMPLETA CON IMAGEN */
+#metodo{background:var(--superficie);padding:0}
+.metodo-grid{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;width:100%}
+@media(max-width:768px){.metodo-grid{grid-template-columns:1fr}}
+.metodo-img{position:relative;overflow:hidden}
+.metodo-img img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:brightness(0.5) saturate(0.7);transition:transform 0.6s ease,filter 0.6s ease}
+.metodo-img:hover img{transform:scale(1.02);filter:brightness(0.6) saturate(0.8)}
+.metodo-img-overlay{position:absolute;inset:0;background:linear-gradient(to right,transparent 40%,var(--superficie) 100%)}
+.metodo-content{padding:6rem 4rem;display:flex;flex-direction:column;justify-content:center}
+@media(max-width:768px){.metodo-content{padding:3rem 2rem}}
+.metodo-label{font-size:0.6rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold);opacity:0.6;margin-bottom:1rem}
+.metodo-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3.5vw,3rem);font-weight:300;line-height:1.18;margin-bottom:1.5rem}
+.metodo-sub{font-size:0.88rem;color:var(--cream-mid);line-height:1.85;margin-bottom:2.5rem}
+.difs{display:flex;flex-direction:column;gap:0}
+.dif{padding:1.2rem 0;border-bottom:1px solid rgba(212,175,127,0.07);display:flex;gap:1rem;align-items:flex-start}
+.dif:first-child{border-top:1px solid rgba(212,175,127,0.07)}
+.dif-dot{width:5px;height:5px;min-width:5px;border-radius:50%;background:var(--gold);margin-top:7px;opacity:0.5}
+.dif h4{font-size:0.87rem;font-weight:500;color:var(--crema);margin-bottom:0.2rem}
+.dif p{font-size:0.78rem;color:var(--silenciado);line-height:1.65;margin:0}
+
+/* PROCESO — PANTALLA COMPLETA */
+#proceso{background:var(--bg);padding:0 3rem}
+.proceso-inner{max-width:1100px;width:100%}
+.proceso-header{margin-bottom:5rem}
+.proceso-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.proceso-steps::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,rgba(212,175,127,0.15),rgba(212,175,127,0.4),rgba(212,175,127,0.15))}
+.step{padding:2.5rem 2rem 2rem 0}
+.step-tag{font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);opacity:0.45;margin-bottom:1.8rem;display:flex;align-items:center;gap:0.6rem}
+.step-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold);opacity:0.7;flex-shrink:0}
+.step h4{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;color:var(--crema);margin-bottom:0.8rem;line-height:1.3}
+.step p{font-size:0.78rem;color:var(--silenciado);line-height:1.75}
+@media(max-width:768px){.proceso-steps{grid-template-columns:1fr 1fr}.proceso-steps::before{display:none}}
+
+/* TESTIMONIOS — PANTALLA COMPLETA */
+#social{background:var(--forest-dim);padding:0 3rem}
+.social-inner{max-width:1100px;width:100%}
+.social-header{margin-bottom:4rem}
+.testimonios{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(212,175,127,0.08)}
+@media(max-width:768px){.testimonios{grid-template-columns:1fr}}
+.testimonio{background:rgba(14,13,10,0.3);padding:2.5rem;backdrop-filter:blur(8px);transition:background 0.3s}
+.testimonio:hover{background:rgba(14,13,10,0.5)}
+.stars{color:var(--gold);font-size:0.55rem;letter-spacing:3px;margin-bottom:1.5rem;opacity:0.5}
+.testimonio blockquote{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:300;font-style:italic;color:var(--cream-mid);line-height:1.75;margin-bottom:1.8rem}
+.testimonio cite{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);opacity:0.55;font-style:normal}
+
+/* CTA — PANTALLA COMPLETA */
+#cta-final{background:var(--bg);padding:0 3rem}
+.cta-bg{position:absolute;inset:0;background-image:url('https://mtealontjqhhxxbltzav.supabase.co/storage/v1/object/public/assets/Imagen2.png');background-size:cover;background-position:center;transform:scale(1.03)}
+.cta-overlay{position:absolute;inset:0;background:rgba(14,13,10,0.78)}
+.cta-content{position:relative;z-index:2;max-width:700px}
+.gold-rule{width:36px;height:1px;background:var(--gold);margin-bottom:2.5rem;opacity:0.45}
+.cta-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,5.5vw,5rem);font-weight:300;line-height:1.1;margin-bottom:1.5rem;text-shadow:0 2px 20px rgba(14,13,10,0.8)}
+.cta-title em{font-style:italic;color:var(--gold-soft)}
+.cta-sub{font-size:0.9rem;color:var(--cream-mid);margin-bottom:3rem;line-height:1.7}
+.cta-nota{font-size:0.65rem;color:var(--silenciado);margin-top:1.2rem;letter-spacing:0.08em}
+
+/* FOOTER */
+footer{background:var(--bg);padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(212,175,127,0.05)}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:0.9rem;letter-spacing:0.22em;color:var(--gold);text-transform:uppercase}
+.footer-text{font-size:0.65rem;color:var(--silenciado);letter-spacing:0.05em}
+@media(max-width:600px){footer{flex-direction:column;gap:1rem;text-align:center}}
+
+/* ANIMACIONES SCROLL */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 0.8s cubic-bezier(0.16,1,0.3,1),transform 0.8s cubic-bezier(0.16,1,0.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity 0.8s cubic-bezier(0.16,1,0.3,1),transform 0.8s cubic-bezier(0.16,1,0.3,1)}
+.reveal-left.visible{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity 0.8s cubic-bezier(0.16,1,0.3,1),transform 0.8s cubic-bezier(0.16,1,0.3,1)}
+.reveal-right.visible{opacity:1;transform:translateX(0)}
+.d1{transition-delay:0.1s}.d2{transition-delay:0.2s}.d3{transition-delay:0.3s}.d4{transition-delay:0.4s}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  nav{padding:1rem 1.5rem}
+  .hero-content{padding:0 1.5rem}
+  #numeros{padding:4rem 1.5rem}
+  .numeros-grid{grid-template-columns:1fr;gap:1.5rem}
+  .numero-item{border-right:none;border-bottom:1px solid rgba(212,175,127,0.08)}
+  .numero-item:last-child{border-bottom:none}
+  #problema{padding:5rem 1.5rem}
+  #proceso{padding:5rem 1.5rem}
+  #social{padding:5rem 1.5rem}
+  #cta-final{padding:0 1.5rem}
+  .scroll-indicator{left:1.5rem}
+}
+</style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1023355450593931');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1023355450593931&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">Senda Natural</div>
+  <a class="nav-cta" href="#" onclick="abrirPopup(event)">Iniciar diagnóstico</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="full">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content" id="heroContent">
+    <p class="hero-eyebrow">Diagnóstico de piel · Gratis · Personalizado</p>
+    <h1 class="hero-title">Tu piel tiene<br>respuestas.<br><em>Tú aún no las has leído.</em></h1>
+    <p class="hero-sub">No es una guía genérica. Es una investigación personalizada para entender exactamente lo que tu piel necesita.</p>
+    <div class="hero-actions">
+      <a class="btn-gold" href="#" onclick="abrirPopup(event)">Iniciar mi diagnóstico</a>
+      <a class="btn-ghost" href="#metodo">Conocer el método</a>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Explorar</span>
+    <div class="scroll-track"></div>
+  </div>
+</section>
+
+<!-- NÚMEROS -->
+<section id="numeros">
+  <div class="numeros-grid">
+    <div class="numero-item reveal">
+      <div class="numero-val">+500</div>
+      <div class="numero-label">Pieles diagnosticadas</div>
+    </div>
+    <div class="numero-item reveal d1">
+      <div class="numero-val">19</div>
+      <div class="numero-label">Perfiles de piel identificados</div>
+    </div>
+    <div class="numero-item reveal d2">
+      <div class="numero-val">100%</div>
+      <div class="numero-label">Diagnóstico personalizado</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEMA -->
+<section id="problema" class="full">
+  <div class="problema-inner">
+    <div class="reveal-left">
+      <p class="problema-label">El patrón que se repite</p>
+      <h2 class="problema-title">¿Te resulta familiar alguna de estas situaciones?</h2>
+      <p class="problema-sub">Si tu piel cambia sin razón aparente, si los productos no funcionan o no sabes por dónde empezar — no es casualidad. Es información que aún no has leído.</p>
+    </div>
+    <div class="problema-cards reveal-right">
+      <div class="pcard">
+        <div class="pcard-header">
+          <span class="pcard-num">01</span>
+          <span class="pcard-title">Piel que cambia sin razón aparente</span>
+        </div>
+        <p class="pcard-text">Seca en invierno, grasa en verano, sensible cuando menos lo esperas. Tu piel no es impredecible — está respondiendo a algo.</p>
+      </div>
+      <div class="pcard">
+        <div class="pcard-header">
+          <span class="pcard-num">02</span>
+          <span class="pcard-title">Productos que no dan resultado</span>
+        </div>
+        <p class="pcard-text">Has probado marcas, sérums, tratamientos. Pero sin un diagnóstico real, estás trabajando a ciegas.</p>
+      </div>
+      <div class="pcard">
+        <div class="pcard-header">
+          <span class="pcard-num">03</span>
+          <span class="pcard-title">No sabes por dónde empezar</span>
+        </div>
+        <p class="pcard-text">El mercado te vende soluciones universales para problemas únicos. Lo que necesitas no es más información — es la información correcta.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MÉTODO -->
+<section id="metodo">
+  <div class="metodo-grid">
+    <div class="metodo-img reveal-left">
+      <img src="https://mtealontjqhhxxbltzav.supabase.co/storage/v1/object/public/assets/Imagen3.png" alt="La Investigadora" loading="lazy">
+      <div class="metodo-img-overlay"></div>
+    </div>
+    <div class="metodo-content reveal-right">
+      <p class="metodo-label">El método</p>
+      <h2 class="metodo-title">No es una guía.<br>Es una investigación.</h2>
+      <p class="metodo-sub">Expediente Piel es un sistema de diagnóstico que analiza tus síntomas, tu momento vital y tus respuestas para construir un protocolo único — el tuyo.</p>
+      <div class="difs">
+        <div class="dif">
+          <div class="dif-dot"></div>
+          <div><h4>Diagnóstico, no consejos genéricos</h4><p>Un proceso estructurado que identifica qué está pasando antes de proponer nada.</p></div>
+        </div>
+        <div class="dif">
+          <div class="dif-dot"></div>
+          <div><h4>Protocolo adaptado a ti</h4><p>Tu resultado no es igual al de nadie más. Porque tu piel tampoco lo es.</p></div>
+        </div>
+        <div class="dif">
+          <div class="dif-dot"></div>
+          <div><h4>Acompañamiento real</h4><p>Después del diagnóstico, una asesora revisa tu caso personalmente.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESO -->
+<section id="proceso" class="full">
+  <div class="proceso-inner">
+    <div class="proceso-header reveal">
+      <p class="problema-label">Cómo funciona</p>
+      <h2 class="problema-title" style="max-width:500px">Cuatro pasos.<br>Un protocolo tuyo.</h2>
+    </div>
+    <div class="proceso-steps">
+      <div class="step reveal d1">
+        <div class="step-tag">Paso 01</div>
+        <h4>Respondes el diagnóstico</h4>
+        <p>Preguntas precisas sobre tus síntomas, tu momento vital y cómo responde tu piel.</p>
+      </div>
+      <div class="step reveal d2">
+        <div class="step-tag">Paso 02</div>
+        <h4>Identificamos tu perfil</h4>
+        <p>El sistema analiza tus respuestas y detecta exactamente qué tipo de piel tienes.</p>
+      </div>
+      <div class="step reveal d3">
+        <div class="step-tag">Paso 03</div>
+        <h4>Recibes tu protocolo</h4>
+        <p>Un protocolo personalizado — no una lista genérica de productos.</p>
+      </div>
+      <div class="step reveal d4">
+        <div class="step-tag">Paso 04</div>
+        <h4>Te acompañamos</h4>
+        <p>Tu asesora personal revisa tu caso y resuelve tus dudas directamente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section id="social" class="full">
+  <div class="social-inner">
+    <div class="social-header reveal">
+      <p class="problema-label">Lo que dicen</p>
+      <h2 class="problema-title">Resultados que se sienten.</h2>
+    </div>
+    <div class="testimonios reveal">
+      <div class="testimonio">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Por primera vez entendí por qué mi piel reaccionaba así. El diagnóstico fue claro, directo, y el protocolo tenía sentido desde el primer día."</blockquote>
+        <cite>Andrea M. · Bogotá</cite>
+      </div>
+      <div class="testimonio">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Llevaba años comprando productos que prometían resultados. Después del diagnóstico dejé de adivinar. Eso no tiene precio."</blockquote>
+        <cite>Lucía T. · Madrid</cite>
+      </div>
+      <div class="testimonio">
+        <div class="stars">★★★★★</div>
+        <blockquote>"No esperaba que un diagnóstico online fuera tan preciso. Sentí que alguien finalmente había leído lo que mi piel llevaba tiempo diciendo."</blockquote>
+        <cite>Valentina R. · Medellín</cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section id="cta-final" class="full">
+  <div class="cta-bg"></div>
+  <div class="cta-overlay"></div>
+  <div class="cta-content reveal">
+    <div class="gold-rule"></div>
+    <h2 class="cta-title">¿Lista para leer<br><em>lo que tu piel lleva<br>tiempo diciéndote?</em></h2>
+    <p class="cta-sub">Diagnóstico personalizado · Gratis · Sin compromisos</p>
+    <a class="btn-gold" href="#" onclick="abrirPopup(event)">Quiero mi diagnóstico</a>
+    <p class="cta-nota">Senda Natural · Asesoría personalizada de piel</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Senda Natural</div>
+  <p class="footer-text">© 2026 Senda Natural · Todos los derechos reservados</p>
+</footer>
+
+<script>
+// Nav scroll
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('scrolled',window.scrollY>60)
+},{ passive:true });
+
+// Hero load animation
+const heroContent=document.getElementById('heroContent');
+const heroBg=document.getElementById('heroBg');
+setTimeout(()=>{
+  heroContent.classList.add('hero-loaded');
+  heroBg.classList.add('loaded');
+},100);
+
+// Scroll reveal
+const revealEls=document.querySelectorAll('.reveal,.reveal-left,.reveal-right');
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      io.unobserve(e.target);
+    }
+  });
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+revealEls.forEach(el=>io.observe(el));
+
+// Parallax sutil en CTA
+const ctaBg=document.querySelector('.cta-bg');
+window.addEventListener('scroll',()=>{
+  const section=document.getElementById('cta-final');
+  const rect=section.getBoundingClientRect();
+  if(rect.top<window.innerHeight&&rect.bottom>0){
+    const progress=(window.innerHeight-rect.top)/(window.innerHeight+rect.height);
+    ctaBg.style.transform=`scale(1.03) translateY(${progress*20-10}px)`;
+  }
+},{ passive:true });
+</script>
+<!-- POPUP CAPTURA LEAD -->
+<div id="popup-overlay" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(14,13,10,0.85);backdrop-filter:blur(8px);align-items:center;justify-content:center">
+  <div id="popup-box" style="background:#1A1C15;border:1px solid rgba(212,175,127,0.15);padding:3rem 2.5rem;max-width:440px;width:90%;position:relative;transform:translateY(20px);opacity:0;transition:transform 0.4s cubic-bezier(0.16,1,0.3,1),opacity 0.4s ease">
+    <button onclick="cerrarPopup()" style="position:absolute;top:1.2rem;right:1.2rem;background:none;border:none;color:#6B6358;cursor:pointer;font-size:1.2rem;line-height:1">✕</button>
+    <p style="font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:#D4AF7F;opacity:0.7;margin-bottom:0.8rem">Antes de continuar</p>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:#FAF6F0;line-height:1.2;margin-bottom:0.8rem">Tu diagnóstico<br><em style="font-style:italic;color:#EDD9B0">te está esperando.</em></h3>
+    <p style="font-size:0.82rem;color:#C8BFB0;line-height:1.7;margin-bottom:2rem">Déjanos tus datos y accede a tu diagnóstico personalizado. Te enviaremos los resultados también por WhatsApp.</p>
+    <div id="popup-form">
+      <div style="margin-bottom:1rem">
+        <input id="lead-nombre" type="text" placeholder="Tu nombre" style="width:100%;background:#0E0D0A;border:1px solid rgba(212,175,127,0.15);color:#FAF6F0;padding:0.85rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;transition:border-color 0.2s" onfocus="this.style.borderColor='rgba(212,175,127,0.5)'" onblur="this.style.borderColor='rgba(212,175,127,0.15)'">
+      </div>
+      <div style="margin-bottom:1rem">
+        <input id="lead-whatsapp" type="tel" placeholder="Tu WhatsApp (con prefijo: +34 612...)" style="width:100%;background:#0E0D0A;border:1px solid rgba(212,175,127,0.15);color:#FAF6F0;padding:0.85rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;transition:border-color 0.2s" onfocus="this.style.borderColor='rgba(212,175,127,0.5)'" onblur="this.style.borderColor='rgba(212,175,127,0.15)'">
+      </div>
+      <div style="margin-bottom:1.8rem">
+        <input id="lead-email" type="email" placeholder="Tu email" style="width:100%;background:#0E0D0A;border:1px solid rgba(212,175,127,0.15);color:#FAF6F0;padding:0.85rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;transition:border-color 0.2s" onfocus="this.style.borderColor='rgba(212,175,127,0.5)'" onblur="this.style.borderColor='rgba(212,175,127,0.15)'">
+      </div>
+      <p id="popup-error" style="display:none;font-size:0.75rem;color:#C49A5A;margin-bottom:1rem"></p>
+      <button onclick="enviarLead()" id="popup-btn" style="width:100%;background:#D4AF7F;color:#0E0D0A;font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;padding:1rem;border:none;cursor:pointer;transition:background 0.2s">Acceder a mi diagnóstico</button>
+      <p style="font-size:0.65rem;color:#6B6358;text-align:center;margin-top:1rem;line-height:1.6">Sin spam. Tus datos están protegidos y solo se usan para enviarte tu diagnóstico.</p>
+    </div>
+    <div id="popup-success" style="display:none;text-align:center;padding:1rem 0">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:#EDD9B0;margin-bottom:0.8rem">Perfecto. Redirigiendo…</p>
+      <p style="font-size:0.82rem;color:#C8BFB0">En un momento accedes a tu diagnóstico.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// SUPABASE CONFIG
+const SUPABASE_URL='https://mtealontjqhhxxbltzav.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im10ZWFsb250anFoaHh4Ymx0emF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ3MDYzMzAsImV4cCI6MjA1MDI4MjMzMH0.X3D9PY6bS3OlZuS3-bRzFhg-OurlvKg2AcGpGmgfIYo';
+
+function abrirPopup(e){
+  e.preventDefault();
+  const overlay=document.getElementById('popup-overlay');
+  const box=document.getElementById('popup-box');
+  overlay.style.display='flex';
+  setTimeout(()=>{box.style.transform='translateY(0)';box.style.opacity='1'},10);
+  document.body.style.overflow='hidden';
+}
+
+function cerrarPopup(){
+  const overlay=document.getElementById('popup-overlay');
+  const box=document.getElementById('popup-box');
+  box.style.transform='translateY(20px)';
+  box.style.opacity='0';
+  setTimeout(()=>{
+    overlay.style.display='none';
+    document.body.style.overflow='';
+    document.getElementById('popup-form').style.display='block';
+    document.getElementById('popup-success').style.display='none';
+    document.getElementById('lead-nombre').value='';
+    document.getElementById('lead-whatsapp').value='';
+    document.getElementById('lead-email').value='';
+    document.getElementById('popup-error').style.display='none';
+  },400);
+}
+
+document.getElementById('popup-overlay').addEventListener('click',function(e){
+  if(e.target===this)cerrarPopup();
+});
+
+async function enviarLead(){
+  const nombre=document.getElementById('lead-nombre').value.trim();
+  const whatsapp=document.getElementById('lead-whatsapp').value.trim();
+  const email=document.getElementById('lead-email').value.trim();
+  const error=document.getElementById('popup-error');
+  const btn=document.getElementById('popup-btn');
+
+  if(!nombre){error.textContent='Por favor escribe tu nombre.';error.style.display='block';return}
+  if(!whatsapp){error.textContent='Por favor escribe tu WhatsApp.';error.style.display='block';return}
+  if(!email||!email.includes('@')){error.textContent='Por favor escribe un email válido.';error.style.display='block';return}
+
+  error.style.display='none';
+  btn.textContent='Guardando...';
+  btn.style.opacity='0.7';
+  btn.disabled=true;
+
+  try{
+    const res=await fetch(`${SUPABASE_URL}/rest/v1/leads_landing`,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'apikey':SUPABASE_KEY,
+        'Authorization':`Bearer ${SUPABASE_KEY}`,
+        'Prefer':'return=minimal'
+      },
+      body:JSON.stringify({
+        nombre,
+        whatsapp,
+        email,
+        fuente:'landing_sendanatural',
+        created_at:new Date().toISOString()
+      })
+    });
+
+    // Registrar evento en Meta Pixel
+    if(typeof fbq!=='undefined'){
+      fbq('track','Lead',{content_name:'Diagnostico Piel'});
+    }
+
+    // Mostrar éxito y redirigir
+    document.getElementById('popup-form').style.display='none';
+    document.getElementById('popup-success').style.display='block';
+    setTimeout(()=>{
+      window.open('https://app.sendanatural.lat','_blank');
+      cerrarPopup();
+    },1500);
+
+  }catch(err){
+    btn.textContent='Acceder a mi diagnóstico';
+    btn.style.opacity='1';
+    btn.disabled=false;
+    error.textContent='Hubo un problema. Inténtalo de nuevo.';
+    error.style.display='block';
+  }
+}
+
+// Cerrar con ESC
+document.addEventListener('keydown',e=>{if(e.key==='Escape')cerrarPopup()});
+</script>
+
+</body>
+</html>
