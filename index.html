@@ -516,6 +516,19 @@ async function enviarLead(){
     const rows=await res.json();
     const landingId=rows?.[0]?.id??'';
 
+    // Crear lead en tabla principal para que aparezca inmediatamente en Supabase
+    fetch('https://app.sendanatural.lat/api/leads',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        nombre,
+        whatsapp,
+        email,
+        landing_lead_id:landingId||undefined,
+        fuente:'directo'
+      })
+    }).catch(()=>{});
+
     // Registrar evento en Meta Pixel
     if(typeof fbq!=='undefined'){
       fbq('track','Lead',{content_name:'Diagnostico Piel'});
