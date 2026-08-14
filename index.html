@@ -502,7 +502,7 @@ async function enviarLead(){
         'Content-Type':'application/json',
         'apikey':SUPABASE_KEY,
         'Authorization':`Bearer ${SUPABASE_KEY}`,
-        'Prefer':'return=minimal'
+        'Prefer':'return=representation'
       },
       body:JSON.stringify({
         nombre,
@@ -512,6 +512,9 @@ async function enviarLead(){
         created_at:new Date().toISOString()
       })
     });
+
+    const rows=await res.json();
+    const landingId=rows?.[0]?.id??'';
 
     // Registrar evento en Meta Pixel
     if(typeof fbq!=='undefined'){
@@ -526,7 +529,10 @@ async function enviarLead(){
     const dotsAnim=setInterval(()=>{d=(d+1)%4;dotsEl.textContent='.'.repeat(d||1)},500);
     setTimeout(()=>{
       clearInterval(dotsAnim);
-      window.location.href='https://app.sendanatural.lat';
+      const dest=landingId
+        ?`https://app.sendanatural.lat/senda?lid=${landingId}`
+        :'https://app.sendanatural.lat/senda';
+      window.location.href=dest;
     },3000);
 
   }catch(err){
