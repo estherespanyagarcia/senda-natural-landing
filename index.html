@@ -517,7 +517,7 @@ async function enviarLead(){
     const landingId=rows?.[0]?.id??'';
 
     // Crear lead en tabla principal para que aparezca inmediatamente en Supabase
-    fetch('https://app.sendanatural.lat/api/leads',{
+    fetch('https://app.sendanatural.net/api/leads',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
@@ -543,8 +543,8 @@ async function enviarLead(){
     setTimeout(()=>{
       clearInterval(dotsAnim);
       const dest=landingId
-        ?`https://app.sendanatural.lat/senda?lid=${landingId}`
-        :'https://app.sendanatural.lat/senda';
+        ?`https://app.sendanatural.net/senda?lid=${landingId}`
+        :'https://app.sendanatural.net/senda';
       window.location.href=dest;
     },3000);
 
