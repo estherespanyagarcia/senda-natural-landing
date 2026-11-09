@@ -198,7 +198,7 @@ src="https://www.facebook.com/tr?id=1023355450593931&ev=PageView&noscript=1"
 <!-- NAV -->
 <nav id="nav">
   <div class="nav-logo">Senda Natural</div>
-  <a class="nav-cta" href="#" onclick="abrirPopup(event)">Iniciar diagnóstico</a>
+  <a class="nav-cta" href="https://app.sendanatural.net/senda">Iniciar diagnóstico</a>
 </nav>
 
 <!-- HERO -->
@@ -210,7 +210,7 @@ src="https://www.facebook.com/tr?id=1023355450593931&ev=PageView&noscript=1"
     <h1 class="hero-title">Tu piel tiene<br>respuestas.<br><em>Tú aún no las has leído.</em></h1>
     <p class="hero-sub">No es una guía genérica. Es una investigación personalizada para entender exactamente lo que tu piel necesita.</p>
     <div class="hero-actions">
-      <a class="btn-gold" href="#" onclick="abrirPopup(event)">Iniciar mi diagnóstico</a>
+      <a class="btn-gold" href="https://app.sendanatural.net/senda">Iniciar mi diagnóstico</a>
       <a class="btn-ghost" href="#metodo">Conocer el método</a>
     </div>
   </div>
@@ -368,7 +368,7 @@ src="https://www.facebook.com/tr?id=1023355450593931&ev=PageView&noscript=1"
     <div class="gold-rule"></div>
     <h2 class="cta-title">¿Lista para leer<br><em>lo que tu piel lleva<br>tiempo diciéndote?</em></h2>
     <p class="cta-sub">Diagnóstico personalizado · Gratis · Sin compromisos</p>
-    <a class="btn-gold" href="#" onclick="abrirPopup(event)">Quiero mi diagnóstico</a>
+    <a class="btn-gold" href="https://app.sendanatural.net/senda">Quiero mi diagnóstico</a>
     <p class="cta-nota">Senda Natural · Asesoría personalizada de piel</p>
   </div>
 </section>
@@ -416,155 +416,6 @@ window.addEventListener('scroll',()=>{
     ctaBg.style.transform=`scale(1.03) translateY(${progress*20-10}px)`;
   }
 },{ passive:true });
-</script>
-<!-- POPUP CAPTURA LEAD -->
-<div id="popup-overlay" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(14,13,10,0.85);backdrop-filter:blur(8px);align-items:center;justify-content:center">
-  <div id="popup-box" style="background:#1A1C15;border:1px solid rgba(212,175,127,0.15);padding:3rem 2.5rem;max-width:440px;width:90%;position:relative;transform:translateY(20px);opacity:0;transition:transform 0.4s cubic-bezier(0.16,1,0.3,1),opacity 0.4s ease">
-    <button onclick="cerrarPopup()" style="position:absolute;top:1.2rem;right:1.2rem;background:none;border:none;color:#6B6358;cursor:pointer;font-size:1.2rem;line-height:1">✕</button>
-    <div id="popup-header">
-    <p style="font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:#D4AF7F;opacity:0.7;margin-bottom:0.8rem">Antes de continuar</p>
-    <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:#FAF6F0;line-height:1.2;margin-bottom:0.8rem">Tu diagnóstico<br><em style="font-style:italic;color:#EDD9B0">te está esperando.</em></h3>
-    <p style="font-size:0.82rem;color:#C8BFB0;line-height:1.7;margin-bottom:2rem">Déjanos tus datos y accede a tu diagnóstico personalizado. Te enviaremos los resultados también por WhatsApp.</p>
-    </div>
-    <div id="popup-form">
-      <div style="margin-bottom:1rem">
-        <input id="lead-nombre" type="text" placeholder="Tu nombre" style="width:100%;background:#0E0D0A;border:1px solid rgba(212,175,127,0.15);color:#FAF6F0;padding:0.85rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;transition:border-color 0.2s" onfocus="this.style.borderColor='rgba(212,175,127,0.5)'" onblur="this.style.borderColor='rgba(212,175,127,0.15)'">
-      </div>
-      <div style="margin-bottom:1rem">
-        <input id="lead-whatsapp" type="tel" placeholder="Tu WhatsApp (con prefijo: +34 612...)" style="width:100%;background:#0E0D0A;border:1px solid rgba(212,175,127,0.15);color:#FAF6F0;padding:0.85rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;transition:border-color 0.2s" onfocus="this.style.borderColor='rgba(212,175,127,0.5)'" onblur="this.style.borderColor='rgba(212,175,127,0.15)'">
-      </div>
-      <div style="margin-bottom:1.8rem">
-        <input id="lead-email" type="email" placeholder="Tu email" style="width:100%;background:#0E0D0A;border:1px solid rgba(212,175,127,0.15);color:#FAF6F0;padding:0.85rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;transition:border-color 0.2s" onfocus="this.style.borderColor='rgba(212,175,127,0.5)'" onblur="this.style.borderColor='rgba(212,175,127,0.15)'">
-      </div>
-      <p id="popup-error" style="display:none;font-size:0.75rem;color:#C49A5A;margin-bottom:1rem"></p>
-      <button onclick="enviarLead()" id="popup-btn" style="width:100%;background:#D4AF7F;color:#0E0D0A;font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;padding:1rem;border:none;cursor:pointer;transition:background 0.2s">Acceder a mi diagnóstico</button>
-      <p style="font-size:0.65rem;color:#6B6358;text-align:center;margin-top:1rem;line-height:1.6">Sin spam. Tus datos están protegidos y solo se usan para enviarte tu diagnóstico.</p>
-    </div>
-    <div id="popup-success" style="display:none;text-align:center;padding:1rem 0">
-      <p style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:#EDD9B0;margin-bottom:1rem;line-height:1.3">Tu diagnóstico<br>te está esperando.</p>
-      <p style="font-size:0.85rem;color:#C8BFB0;margin-bottom:1.2rem;line-height:1.7">Te enviaremos los resultados por WhatsApp.</p>
-      <p style="font-size:0.78rem;color:#6B6358;letter-spacing:0.1em">Redirigiendo<span id="dots">...</span></p>
-    </div>
-  </div>
-</div>
-
-<script>
-// SUPABASE CONFIG
-const SUPABASE_URL='https://mtealontjqhhxxbltzav.supabase.co';
-const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im10ZWFsb250anFoaHh4Ymx0emF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NjM0NTEsImV4cCI6MjA5NjIzOTQ1MX0.trcJad-OypdDvCGnbwSR8rB3k4RXIcZdIed-jvpCLOc';
-
-function abrirPopup(e){
-  e.preventDefault();
-  const overlay=document.getElementById('popup-overlay');
-  const box=document.getElementById('popup-box');
-  overlay.style.display='flex';
-  setTimeout(()=>{box.style.transform='translateY(0)';box.style.opacity='1'},10);
-  document.body.style.overflow='hidden';
-}
-
-function cerrarPopup(){
-  const overlay=document.getElementById('popup-overlay');
-  const box=document.getElementById('popup-box');
-  box.style.transform='translateY(20px)';
-  box.style.opacity='0';
-  setTimeout(()=>{
-    overlay.style.display='none';
-    document.body.style.overflow='';
-    document.getElementById('popup-form').style.display='block';
-    document.getElementById('popup-success').style.display='none';
-    document.getElementById('popup-header').style.display='block';
-    document.getElementById('lead-nombre').value='';
-    document.getElementById('lead-whatsapp').value='';
-    document.getElementById('lead-email').value='';
-    document.getElementById('popup-error').style.display='none';
-  },400);
-}
-
-document.getElementById('popup-overlay').addEventListener('click',function(e){
-  if(e.target===this)cerrarPopup();
-});
-
-async function enviarLead(){
-  const nombre=document.getElementById('lead-nombre').value.trim();
-  const whatsapp=document.getElementById('lead-whatsapp').value.trim();
-  const email=document.getElementById('lead-email').value.trim();
-  const error=document.getElementById('popup-error');
-  const btn=document.getElementById('popup-btn');
-
-  if(!nombre){error.textContent='Por favor escribe tu nombre.';error.style.display='block';return}
-  if(!whatsapp){error.textContent='Por favor escribe tu WhatsApp.';error.style.display='block';return}
-  if(!email||!email.includes('@')){error.textContent='Por favor escribe un email válido.';error.style.display='block';return}
-
-  error.style.display='none';
-  btn.textContent='Guardando...';
-  btn.style.opacity='0.7';
-  btn.disabled=true;
-
-  try{
-    const res=await fetch(`${SUPABASE_URL}/rest/v1/leads_landing`,{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'apikey':SUPABASE_KEY,
-        'Authorization':`Bearer ${SUPABASE_KEY}`,
-        'Prefer':'return=representation'
-      },
-      body:JSON.stringify({
-        nombre,
-        whatsapp,
-        email,
-        fuente:'landing_sendanatural',
-        created_at:new Date().toISOString()
-      })
-    });
-
-    const rows=await res.json();
-    const landingId=rows?.[0]?.id??'';
-
-    // Crear lead en tabla principal para que aparezca inmediatamente en Supabase
-    fetch('https://app.sendanatural.net/api/leads',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        nombre,
-        whatsapp,
-        email,
-        landing_lead_id:landingId||undefined,
-        fuente:'directo'
-      })
-    }).catch(()=>{});
-
-    // Registrar evento en Meta Pixel
-    if(typeof fbq!=='undefined'){
-      fbq('track','Lead',{content_name:'Diagnostico Piel'});
-    }
-
-    // Mostrar éxito y redirigir
-    document.getElementById('popup-form').style.display='none';
-    document.getElementById('popup-header').style.display='none';
-    document.getElementById('popup-success').style.display='block';
-    // Animación de puntos
-    let d=0;const dotsEl=document.getElementById('dots');
-    const dotsAnim=setInterval(()=>{d=(d+1)%4;dotsEl.textContent='.'.repeat(d||1)},500);
-    setTimeout(()=>{
-      clearInterval(dotsAnim);
-      const dest=landingId
-        ?`https://app.sendanatural.net/senda?lid=${landingId}`
-        :'https://app.sendanatural.net/senda';
-      window.location.href=dest;
-    },3000);
-
-  }catch(err){
-    btn.textContent='Acceder a mi diagnóstico';
-    btn.style.opacity='1';
-    btn.disabled=false;
-    error.textContent='Hubo un problema. Inténtalo de nuevo.';
-    error.style.display='block';
-  }
-}
-
-// Cerrar con ESC
-document.addEventListener('keydown',e=>{if(e.key==='Escape')cerrarPopup()});
 </script>
 
 </body>
